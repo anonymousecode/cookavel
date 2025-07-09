@@ -22,7 +22,7 @@ class ReciperController extends Controller
         $data = $response->json();
         if(count($data['meals'])>1){
 
-          return view('recipelist',['data' =>$data]);
+          return view('recipelist',['data' =>$data,'input' => $input]);
         }
         else{
           return view('recipe', ['data' => $data]);
@@ -32,5 +32,16 @@ class ReciperController extends Controller
           return redirect()->back()->with('error', 'Failed to fetch recipes. Please try again later.');
       }
 
+    }
+
+    function fromRecipeList($data){
+
+      $response = Http::get("www.themealdb.com/api/json/v1/1/lookup.php?i=".$data);
+
+      if($response->successful()){
+          $data = $response->json();
+
+          return view('recipe', ['data' => $data]);
+      }
     }
 }
