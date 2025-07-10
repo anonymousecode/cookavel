@@ -16,7 +16,10 @@
     <div class="container">
         <div class="row py-3">
             <div class="col d-flex justify-content-between align-items-center">
-                <h1 class="fw-semibold"  style="color:#F26A21;">CookaVel</h1>
+                <a href="/" style="text-decoration: none; color: inherit;">
+                  <h1 class="fw-semibold"  style="color:#F26A21;">CookaVel</h1>
+
+                </a>
                 <a href="https://github.com/anonymousecode/cookavel" target="_blank">
                     <img src="{{ asset('images/github.png') }}" class="img-fluid" style="width:40px;" alt="GitHub">
                 </a>

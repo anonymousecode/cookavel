@@ -54,6 +54,17 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="row mt-3">
+                    <h3 class="text-secondary mb-2">Youtube</h3>
+                    <div class=" bg-light">
+                        @php
+                            $youtube = $data['meals'][0]['strYoutube'];
+                            $embedUrl = str_replace("watch?v=", "embed/", $youtube);
+                        @endphp
+                        <iframe class="card-img-top"  width="50%" height="315" src="{{$embedUrl }}" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
             </div>
         </x-slot>
     </x-layout>
