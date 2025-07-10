@@ -1,44 +1,42 @@
-# Base image with PHP and Apache
+# Use an official PHP image with Apache
 FROM php:8.2-apache
 
 # Set working directory
 WORKDIR /var/www/html
 
-# Install system dependencies & PHP extensions required by Laravel
+# Install dependencies
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
+    zip \
     libzip-dev \
     libonig-dev \
     libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
     curl \
-    zip \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install zip pdo_mysql mbstring exif pcntl bcmath gd
+    && docker-php-ext-install pdo_mysql zip
 
-# Enable Apache mod_rewrite for Laravel routing
+# Enable Apache rewrite module
 RUN a2enmod rewrite
 
-# Copy application files
+# Set correct Apache document root to Laravel's public folder
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+
+# Update Apache config to use the new document root
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+
+# Copy project files
 COPY . /var/www/html
 
-# Set permissions for storage and cache (important for Render)
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# Set proper permissions
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Install Composer (copy from official composer image)
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Install PHP dependencies without dev packages & optimize autoloader
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+# Install Laravel dependencies
+RUN composer install --no-dev --optimize-autoloader
 
-# Generate optimized autoload files & clear caches (optional, for faster startup)
-RUN php artisan config:cache && php artisan route:cache && php artisan view:cache
-
-# Expose port 80
+# Expose port
 EXPOSE 80
-
-# Use apache2-foreground to keep the container running
-CMD ["apache2-foreground"]
