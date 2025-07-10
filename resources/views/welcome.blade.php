@@ -7,31 +7,42 @@
 </head>
 <body>
     <x-layout>
+        <x-slot name="content">
+            <div class="container py-5">
+                <!-- Title and Subtitle -->
+                <div class="text-center mb-4">
+                    <h1 class="fw-bold"  style="color:#F26A21;">Welcome to CookaVel</h1>
+                    <p class="text-muted">Your culinary adventure starts here!</p>
+                </div>
 
-    <x-slot  name="content">
-        <div>
-            <h1>Welcome to CookaVel</h1>
-            <p>Your culinary adventure starts here!</p>
+                <!-- Search Form -->
+                <div class="row justify-content-center mb-4">
+                    <div class="col-md-6">
+                        <form action="{{ route('getRecipe') }}" method="get" class="d-flex gap-2">
+                            @csrf
+                            <input type="text" name="input" id="input" class="form-control" placeholder="What would you like to cook today?">
+                            <button type="submit" class="btn text-light" style="background:#F26A21;">Search</button>
+                        </form>
+                    </div>
+                </div>
 
-            <form action="{{route('getRecipe')}}" method="get">
-                @csrf
-                <input type="text" name="input" id="input" placeholder="What would you like to cook today?"><br>
-                <input type="submit" class="btn">
-            </form>
-            
-        </div>
+                <!-- Alphabet Buttons -->
+                <div class="row justify-content-center g-2">
+                    @php
+                        $alphabets = range('A', 'Z');
+                    @endphp
 
-        <div>
-            @php
-                $alphabets = [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-            @endphp
-
-            @foreach($alphabets as $alphabet)
-                <button class="btn">{{$alphabet}}</button>
-            @endforeach
-        </div>
-    </x-slot>
-
-    </x-layout> 
+                    @foreach($alphabets as $alphabet)
+                        <div class="col-auto">
+                            <button class="btn "
+                                    onclick="window.location = '{{ route('fromAlphabet', $alphabet) }}'" style="border-color:#F26A21;">
+                                {{ $alphabet }}
+                            </button>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </x-slot>
+    </x-layout>
 </body>
 </html>

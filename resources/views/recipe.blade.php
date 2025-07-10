@@ -14,7 +14,7 @@
         <x-slot name="content">
             <div class="container py-5">
                 <div class="row mb-4">
-                    <h1 class="text-center text-primary">{{ $data['meals'][0]['strMeal'] }}</h1>
+                    <h1 class="text-center" style="color:#F26A21;">{{ $data['meals'][0]['strMeal'] }}</h1>
                     <p class="text-center mt-2 mb-4 fs-5 text-secondary">
                         {{ $data['meals'][0]['strCategory'] }} &mdash; {{ $data['meals'][0]['strArea'] }}
                     </p>
