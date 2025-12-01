@@ -9,4 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Ping CookaVel
-        run: curl -s https://cookavel.onrender.com > /dev/null
+        run: |
+          for i in 1 2 3; do
+            curl -s https://cookavel.onrender.com > /dev/null && break
+            sleep 10
+          done
+
